@@ -1,0 +1,24 @@
+#!/bin/bash
+LOOKDIR="/mnt/tlstc/mnt/4tb/download/rencode/waiting/";
+OLDDIR="/mnt/tlstc/mnt/4tb/download/rencode/old/";
+ENCDIR="/mnt/tlstc/mnt/4tb/download/rencode/done/";
+cd $LOOKDIR;
+SCANDIR=$(find . -name *.json | awk -F "/" {'OFS="/";$NF="";print $0'} | head -n 1);
+SCANSUBDIR=$(echo $SCANDIR | sed 's/^\.\///g');
+SCANPATH=$LOOKDIR$SCANSUBDIR;
+OLDPATH=$OLDDIR$SCANSUBDIR;
+ENCPATH=$ENCDIR$SCANSUBDIR;
+SETTINGSFILE=$(find "$SCANPATH" -name *.json | head -n 1);
+mkdir -p "$OLDPATH";
+mkdir -p "$ENCPATH";
+FILETOPROCESS=$(find "$SCANPATH" -maxdepth 1 -type f ! -iname *.json | sort | head -n 1 | awk -F "/" '{print $NF}' | sed 's/\.\///g');
+if [ $(find "$SCANDIR" -maxdepth 1 -type f ! -iname *.json | wc -l) -eq 0 ] ;
+  then mv "$SETTINGSFILE" "$SETTINGSFILE-done";
+  exit 0;
+fi;
+if [[ $(pgrep ffmpeg | wc -c) -gt 0 ]];
+  then exit 0;
+  else  if [ $(find "$SCANDIR" -maxdepth 1 -type f ! -iname *.json | wc -l) -gt 0 ] ;
+    then ffmpegfront -infile "$SCANPATH$FILETOPROCESS" -outfile  "$ENCPATH$FILETOPROCESS" -settings "$SETTINGSFILE" && mv "$SCANPATH$FILETOPROCESS" "$OLDPATH$FILETOPROCESS" ;
+        fi;
+fi;
