@@ -7,8 +7,9 @@ After=network.target network-online.target
 [Service]
 Type=simple
 User=nobody
-ExecStart=/usr/bin/reencode_queue.py -c ready.conf -s /mnt/media/download/rencode/waiting -o /mnt/media/download/rencode/done -l /mnt/media/download/rencode/logs -D
+ExecStart=/usr/bin/reencode_queue.py -c ready.conf -s /mnt/media/download/rencode/waiting -o /mnt/media/download/rencode/done -l /mnt/media/download/rencode/logs -d
 Restart=on-failure
+RestartSec=10s
 
 [Install]
 WantedBy=multi-user.target
