@@ -1,0 +1,13 @@
+[Unit]
+Description=reencode-queue
+Wants=network-online.target
+After=network.target network-online.target
+
+
+[Service]
+Type=simple
+User=nobody
+ExecStart=/usr/bin/reencode_queue.py -c ready.conf -s /mnt/media/download/rencode/waiting -o /mnt/media/download/rencode/done -l /mnt/media/download/rencode/logs -D
+
+[Install]
+WantedBy=multi-user.target
