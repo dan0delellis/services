@@ -7,7 +7,7 @@ After=network.target network-online.target mnt-music.mount
 [Service]
 Type=simple
 User=nobody
-ExecStart=/usr/bin/cvlc -LZ /etc/default/vlc-radio/playlist.m3u8
+ExecStart=/usr/bin/cvlc -L /etc/default/vlc-radio/playlist.m3u8
 Restart=on-failure
 
 [Install]
